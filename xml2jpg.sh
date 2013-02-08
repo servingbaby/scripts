@@ -1,7 +1,7 @@
 #!/bin/bash
 # xml2jph.sh v1.0
 #
-# Copyright (c) <year> <copyright holders>
+# Copyright (c) 2012 <troyengel>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
