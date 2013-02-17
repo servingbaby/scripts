@@ -35,7 +35,7 @@ function nctzv() { [ $# -eq 2 ] && (timeout 3 bash -c "echo >/dev/tcp/$1/$2" && 
 function ncuzv() { [ $# -eq 2 ] && (timeout 3 bash -c "echo >/dev/udp/$1/$2" && echo "Connection to $1 port $2/udp succeeded" || echo "Connection to $1 port $2/udp failed"); }
 
 # the same nctzv() function in perl
-function nctzvi_pl() { perl -e 'use IO::Socket::INET;$socket=IO::Socket::INET->new(Proto=>tcp,Timeout=>3,PeerAddr=>$ARGV[0],PeerPort=>$ARGV[1]);printf("Connection to %s port %s/tcp ",$ARGV[0],$ARGV[1]);if(defined $socket && $socket){$socket->close();print "succeeded\n"}else{print "failed\n";}' $1 $2; }
+function nctzv_pl() { perl -e 'use IO::Socket::INET;$socket=IO::Socket::INET->new(Proto=>tcp,Timeout=>3,PeerAddr=>$ARGV[0],PeerPort=>$ARGV[1]);printf("Connection to %s port %s/tcp ",$ARGV[0],$ARGV[1]);if(defined $socket && $socket){$socket->close();print "succeeded\n"}else{print "failed\n";}' $1 $2; }
 
 # the same nctzv() function in python
 function nctzv_py() { python -c "exec('import sys\nimport socket\nh=sys.argv[1]\np=sys.argv[2]\ns=socket.socket(socket.AF_INET,socket.SOCK_STREAM)\ns.settimeout(3)\ntry:\n\ts.connect((sys.argv[1],int(sys.argv[2])))\n\ts.shutdown(2)\n\tprint \"Connection to \"+h+\" port \"+p+\"/tcp succeeded\"\nexcept:\n\tprint \"Connection to \"+h+\" port \"+p+\"/tcp failed\"\ns.close')" $1 $2; }
