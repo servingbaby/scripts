@@ -21,18 +21,12 @@
 # SOFTWARE.
 
 # if resize (via xterm) is not available
-
 alias tsize='shopt -s checkwinsize;COLUMNS=$(tput cols);LINES=$(tput lines);export COLUMNS LINES;echo -e "COLUMNS=$COLUMNS;\nLINES=$LINES;\nexport COLUMNS LINES;"'
 
 # if netcat is not available
 # - requires --enable-net-redirections compiled in with bash
 # - works on RHEL/CentOS/Fedora but not Ubuntu/Debian
-
-# tcp
-function nctzv() { [ $# -eq 2 ] && (timeout 3 bash -c "echo >/dev/tcp/$1/$2" && echo "Connection to $1 port $2/tcp succeeded" || echo "Connection to $1 port $2/tcp failed"); }
-
-# udp
-function ncuzv() { [ $# -eq 2 ] && (timeout 3 bash -c "echo >/dev/udp/$1/$2" && echo "Connection to $1 port $2/udp succeeded" || echo "Connection to $1 port $2/udp failed"); }
+function nctzv() { [[ $# -eq 2 ]] && (timeout 3 bash -c "echo >/dev/tcp/$1/$2" && echo "Connection to $1 port $2/tcp succeeded" || echo "Connection to $1 port $2/tcp failed"); }
 
 # the same nctzv() function in perl
 function nctzv_pl() { perl -e 'use IO::Socket::INET;$socket=IO::Socket::INET->new(Proto=>tcp,Timeout=>3,PeerAddr=>$ARGV[0],PeerPort=>$ARGV[1]);printf("Connection to %s port %s/tcp ",$ARGV[0],$ARGV[1]);if(defined $socket && $socket){$socket->close();print "succeeded\n"}else{print "failed\n";}' $1 $2; }
