@@ -1,0 +1,7 @@
+/var/log/mysql_threads.log {
+    rotate 4
+    missingok
+    notifempty
+    size 5M
+    weekly
+}
