@@ -1,8 +1,19 @@
 #!/bin/bash
+# Network Interface Script to bring Red Hat compatibility to Ubuntu
+# Copyright (c) 2013 Matt Martz and Rackspace US, Inc.
+# All Rights Reserved.
 #
-# Provide a RHEL experience for restarting networking in Ubuntu
-# (c)2013 Matt Martz
-# v0.1
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
 
 RES_COL=60
 MOVE_TO_COL="echo -en \\033[${RES_COL}G"
@@ -44,8 +55,6 @@ echo_failure() {
 
 get_iface_list() {
 	local IFACES
-	#IFACES=(`grep -v 'lo:' /proc/net/dev | sed -nr 's/^\s+(\w+[0-9]+):.+/\1/p'` \
-	#	`ifquery --list -e lo`)
 	IFACES=(`ifquery --list -e lo`)
 	echo ${IFACES[*]}
 }
@@ -84,13 +93,9 @@ up_interfaces() {
 	echo "Bringing up loopback interface: "
 	ifup lo
 	[ $? = 0 ] && echo_success || echo_failure
-	#for IFACE in $(order_array_reverse `get_iface_list`); do
-	#	echo -n "Bringing up interface $IFACE: "
-	#	ifup $IFACE
-	#	[ $? = 0 ] && echo_success || echo_failure
-	#	echo
-	#done
 	echo -n "Bringing up remaining interfaces: "
+	# This prevents an issue where ifup blocks waiting for "slave"
+	# interfaces or vice versa
 	ifup -a -e lo -e bond &
 	ifup -a -e lo -e eth
 	[ $? = 0 ] && echo_success || echo_failure
