@@ -62,10 +62,10 @@ PKG_XORG="xorg xorg-drivers xorg-xinit xorg-server-utils xorg-twm xorg-xclock xo
 PKG_VBOX="virtualbox-guest-utils virtualbox-guest-dkms virtualbox-guest-modules virtualbox-guest-modules-lts"
 
 # CLI stuff
-PKG_CLI="alsa-firmware base-devel bash-completion bc bluez bluez-firmware cadaver cpio cronie cups cups-filters cups-pdf cups-pk-helper dcfldd dhclient dmidecode ethtool expect ffmpeg freerdp gdisk git gnu-netcat id3v2 iftop ipw2100-fw ipw2200-fw iw kexec-tools lame lsof mailx mplayer mutt net-tools nethogs nfs-utils nmap ntfs-3g ntp openssh p7zip parted perl-mime-lite perl-xml-simple pwgen python-pexpect python-setuptools python-yaml python2-soappy rdesktop rfkill rpcbind rsync strace stunnel subversion sudo tcpdump tigervnc unrar unzip usb_modeswitch vim vim-systemd vlc wget whois wireshark-cli zip"
+PKG_CLI="alsa-firmware base-devel bash-completion bc bluez bluez-firmware cadaver cpio cronie cups cups-filters cups-pdf cups-pk-helper dcfldd dhclient dmidecode ethtool expect ffmpeg freerdp gdisk git gnu-netcat id3v2 iftop ipw2100-fw ipw2200-fw iw kexec-tools lame lsof mailx mplayer mutt net-tools nethogs nfs-utils nmap ntfs-3g ntp openssh p7zip parted perl-mime-lite perl-xml-simple pwgen python-pexpect python-setuptools python-yaml python2 python2-pexpect python2-setuptools python2-soappy python2-yaml rdesktop rfkill rpcbind rsync strace stunnel subversion sudo tcpdump tigervnc unrar unzip usb_modeswitch vim vim-systemd vlc wget whois wireshark-cli zip"
 
 # X Desktop stuff
-PKG_DWIN="mate mate-extra mate-themes-extras lightdm-gtk2-greeter gst-plugins-bad gst-plugins-ugly gstreamer0.10-base-plugins gstreamer0.10-ugly gstreamer0.10-ugly-plugins gtk-aurora-engine networkmanager networkmanager-openconnect networkmanager-openvpn networkmanager-pptp networkmanager-vpnc network-manager-applet networkmanager-dispatcher-ntpd systemd-ui"
+PKG_DWIN="mate mate-extra mate-themes-extras lightdm-gtk2-greeter gnome-keyring gst-plugins-bad gst-plugins-ugly gstreamer0.10-base-plugins gstreamer0.10-ugly gstreamer0.10-ugly-plugins gtk-aurora-engine networkmanager networkmanager-openconnect networkmanager-openvpn networkmanager-pptp networkmanager-vpnc network-manager-applet networkmanager-dispatcher-ntpd system-config-printer systemd-ui"
 
 # GUI stuffs
 PKG_XAPP="argyllcms brasero chromium easytag feh firefox flashplugin gimp gkrellm gvfs-afc gvfs-mtp gvfs-smb libreoffice-calc libreoffice-draw libreoffice-en-US libreoffice-impress libreoffice-gnome libreoffice-writer mate-mplayer pragha pidgin pidgin-otr seahorse thunderbird tk transmission-gtk x11-ssh-askpass xchat wireshark-gtk"
@@ -248,7 +248,7 @@ if [[ ! -f /root/.archmate/stage-5.done ]]; then
 [greeter]
 background=#152233
 theme-name=TraditionalOk
-font-name=Sans 12
+font-name=Sans 10
 xft-antialias=true
 xft-hintstyle=none
 xft-rgba=rgb
