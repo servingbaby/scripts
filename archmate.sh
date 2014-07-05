@@ -70,6 +70,9 @@ PKG_DWIN="mate mate-extra mate-themes-extras lightdm-gtk2-greeter gnome-keyring 
 # GUI stuffs
 PKG_XAPP="argyllcms brasero chromium easytag feh firefox flashplugin gimp gkrellm gvfs-afc gvfs-mtp gvfs-smb libreoffice-calc libreoffice-draw libreoffice-en-US libreoffice-impress libreoffice-gnome libreoffice-writer mate-mplayer pragha pidgin pidgin-otr seahorse thunderbird tk transmission-gtk x11-ssh-askpass xchat wireshark-gtk"
 
+# Things that get dragged in by meta packages to remove
+PKG_REMOVE="xorg-fonts-100dpi xorg-fonts-75dpi"
+
 # this will save the top part of this script to "prep.sh" - handy
 # if you wget this script from a boot ISO and want to save the
 # pre-prepared stuff for use that is not done on purpose
@@ -238,6 +241,9 @@ echo "== Stage 5: Installing all other packages =="
 
 if [[ ! -f /root/.archmate/stage-5.done ]]; then
   pacman -S --noconfirm ${PKG_CLI} ${PKG_DWIN} ${PKG_XAPP}
+  [[ $? -ne 0 ]] && myexit "pacman error - exiting."
+
+  pacman -Rnu --noconfirm ${PKG_REMOVE}
   [[ $? -ne 0 ]] && myexit "pacman error - exiting."
 
   # clean up a little
