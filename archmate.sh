@@ -55,23 +55,23 @@ GRUB_UEFI_PART="/dev/sda1"
 # be careful changing this
 PKG_CORE="grub linux-headers linux-lts linux-lts-headers"
 
-# can be tuned to only include specific X drivers
-PKG_XORG="xorg xorg-drivers xorg-xinit xorg-server-utils xorg-twm xorg-xclock xorg-fonts-type1 xorg-utils mesa xterm alsa-utils gnu-free-fonts ttf-dejavu ttf-liberation"
+# can be tuned - includes all video drivers, etc.
+PKG_XORG="xorg xorg-drivers xorg-xinit xorg-server-utils xorg-twm xorg-xclock xorg-utils xterm alsa-utils gnu-free-fonts mesa ttf-dejavu ttf-liberation"
+
+# Things that get dragged in by xorg to remove
+PKG_XDEL="font-misc-ethiopic xorg-fonts-100dpi xorg-fonts-75dpi"
 
 # if VBOXGUEST=true
 PKG_VBOX="virtualbox-guest-utils virtualbox-guest-dkms virtualbox-guest-modules virtualbox-guest-modules-lts"
 
 # CLI stuff
-PKG_CLI="alsa-firmware base-devel bash-completion bc bluez bluez-firmware cadaver cpio cronie cups cups-filters cups-pdf cups-pk-helper dcfldd dhclient dmidecode ethtool expect ffmpeg freerdp gdisk git gnu-netcat id3v2 iftop ipw2100-fw ipw2200-fw iw kexec-tools lame lsof mailx mplayer mutt net-tools nethogs nfs-utils nmap ntfs-3g ntp openssh p7zip parted perl-mime-lite perl-xml-simple pwgen python-pexpect python-setuptools python-yaml python2 python2-pexpect python2-setuptools python2-soappy python2-yaml rdesktop rfkill rpcbind rsync strace stunnel subversion sudo tcpdump tigervnc unrar unzip usb_modeswitch vim vim-systemd vlc wget whois wireshark-cli zip"
+PKG_CLI="abs alsa-firmware base-devel bash-completion bc bluez bluez-firmware cadaver cpio cronie cups cups-filters cups-pdf cups-pk-helper dcfldd dhclient dmidecode ethtool expect ffmpeg freerdp gdisk git gnu-netcat id3v2 iftop ipw2100-fw ipw2200-fw iw kexec-tools lame lsof mailx mplayer mutt net-tools nethogs nfs-utils nmap ntfs-3g ntp openssh p7zip parted perl-mime-lite perl-xml-simple pwgen python-pexpect python-setuptools python-yaml python2 python2-pexpect python2-setuptools python2-soappy python2-yaml rdesktop rfkill rpcbind rsync strace stunnel subversion sudo tcpdump tigervnc unrar unzip usb_modeswitch vim vim-systemd vlc wget whois wireshark-cli zip"
 
 # X Desktop stuff
 PKG_DWIN="mate mate-extra mate-themes-extras lightdm-gtk2-greeter gnome-keyring gst-plugins-bad gst-plugins-ugly gstreamer0.10-base-plugins gstreamer0.10-ugly gstreamer0.10-ugly-plugins gtk-aurora-engine networkmanager networkmanager-openconnect networkmanager-openvpn networkmanager-pptp networkmanager-vpnc network-manager-applet networkmanager-dispatcher-ntpd system-config-printer systemd-ui"
 
 # GUI stuffs
 PKG_XAPP="argyllcms brasero chromium easytag feh firefox flashplugin gimp gkrellm gvfs-afc gvfs-mtp gvfs-smb libreoffice-calc libreoffice-draw libreoffice-en-US libreoffice-impress libreoffice-gnome libreoffice-writer mate-mplayer pragha pidgin pidgin-otr seahorse thunderbird tk transmission-gtk x11-ssh-askpass xchat wireshark-gtk"
-
-# Things that get dragged in by meta packages to remove
-PKG_REMOVE="xorg-fonts-100dpi xorg-fonts-75dpi"
 
 # this will save the top part of this script to "prep.sh" - handy
 # if you wget this script from a boot ISO and want to save the
@@ -243,7 +243,7 @@ if [[ ! -f /root/.archmate/stage-5.done ]]; then
   pacman -S --noconfirm ${PKG_CLI} ${PKG_DWIN} ${PKG_XAPP}
   [[ $? -ne 0 ]] && myexit "pacman error - exiting."
 
-  pacman -Rnu --noconfirm ${PKG_REMOVE}
+  pacman -Rnu --noconfirm ${PKG_XDEL}
   [[ $? -ne 0 ]] && myexit "pacman error - exiting."
 
   # clean up a little
