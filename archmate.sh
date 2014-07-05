@@ -3,8 +3,9 @@
 # archmate.sh - Arch installation script
 # Troy Engel (TE)
 #
-# 1. boot archlinux-2014.06.01-dual.iso
-# 2. wget http://<url>/archmate.sh
+# 1. boot archlinux-<date>-dual.iso
+# 2. wget -O archmate.sh http://git.io/archmate
+#    curl -Lo archmate.sh http://git.io/archmate
 # 3. bash archmate.sh prep  (extracts 'prep.sh')
 # 4. bash archmate.sh       (after 'arch-chroot /mnt')
 #
