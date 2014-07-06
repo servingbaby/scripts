@@ -54,7 +54,7 @@ GRUB_BIOS_DISK="/dev/sda"
 GRUB_UEFI_PART="/dev/sda1"
 
 # be careful changing this
-PKG_CORE="grub linux-headers linux-lts linux-lts-headers"
+PKG_CORE="grub linux-headers linux-lts linux-lts-headers os-prober"
 
 # can be tuned - includes all video drivers, etc.
 PKG_XORG="xorg xorg-drivers xorg-xinit xorg-server-utils xorg-twm xorg-xclock xorg-utils xterm alsa-utils gnu-free-fonts mesa ttf-dejavu ttf-liberation"
@@ -219,7 +219,7 @@ if [[ ! -f /root/.archmate/stage-4.done ]]; then
   pacman -S --noconfirm ${PKG_XORG}
   [[ $? -ne 0 ]] && myexit "pacman error - exiting."
 
-  if [[ $VBOXGUEST ]]; then
+  if [[ $VBOXGUEST == true ]]; then
     echo "Installing Virtualbox guest..."
     pacman -S --noconfirm ${PKG_VBOX}
     [[ $? -ne 0 ]] && myexit "pacman error - exiting."
