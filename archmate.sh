@@ -72,7 +72,7 @@ PKG_CLI="abs alsa-firmware base-devel bash-completion bc bluez bluez-firmware ca
 PKG_DWIN="mate mate-extra mate-themes-extras lightdm-gtk2-greeter gnome-keyring gst-plugins-bad gst-plugins-ugly gstreamer0.10-base-plugins gstreamer0.10-ugly gstreamer0.10-ugly-plugins gtk-aurora-engine networkmanager networkmanager-openconnect networkmanager-openvpn networkmanager-pptp networkmanager-vpnc network-manager-applet networkmanager-dispatcher-ntpd system-config-printer systemd-ui"
 
 # GUI stuffs
-PKG_XAPP="argyllcms brasero chromium easytag feh firefox flashplugin gimp gkrellm gvfs-afc gvfs-mtp gvfs-smb libreoffice-calc libreoffice-draw libreoffice-en-US libreoffice-impress libreoffice-gnome libreoffice-writer mate-mplayer pragha pidgin pidgin-otr seahorse thunderbird tk transmission-gtk x11-ssh-askpass xchat wireshark-gtk"
+PKG_XAPP="argyllcms brasero chromium easytag feh firefox flashplugin gimp gkrellm gucharmap gvfs-afc gvfs-mtp gvfs-smb libreoffice-calc libreoffice-draw libreoffice-en-US libreoffice-impress libreoffice-gnome libreoffice-writer mate-mplayer pragha pidgin pidgin-otr seahorse thunderbird tk transmission-gtk x11-ssh-askpass xchat wireshark-gtk"
 
 # this will save the top part of this script to "prep.sh" - handy
 # if you wget this script from a boot ISO and want to save the
