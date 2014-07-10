@@ -61,7 +61,7 @@ COMMIT
 EOF
 fi
 
-echo "Disabling firewalld and enabline iptables/ip6tables..."
+echo "Disabling firewalld and enabling iptables/ip6tables..."
 yum -y install iptables-services && ( \
  systemctl stop firewalld && systemctl disable firewalld.service; \
  systemctl start iptables.service && systemctl enable iptables.service; \
