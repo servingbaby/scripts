@@ -261,6 +261,16 @@ xft-hintstyle=none
 xft-rgba=rgb
 EOF
 
+  cat << 'EOF' > /usr/share/glib-2.0/schemas/mate-background.gschema.override
+[org.mate.background]
+color-shading-type='solid'
+picture-options='centered'
+picture-filename=''
+primary-color='#152233'
+secondary-color='#000000'
+EOF
+  glib-compile-schemas /usr/share/glib-2.0/schemas/
+
   touch /root/.archmate/stage-5.done
 else
   echo " - /root/.archmate/stage-5.done found, skipping."
