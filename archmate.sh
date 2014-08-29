@@ -306,7 +306,7 @@ sudo pacman -U package-query-*.pkg.tar.xz
 cd ../yaourt
 makepkg -s
 sudo pacman -U yaourt-*.pkg.tar.xz 
-yaourt -S --noconfirm downgrade duply chromium-pepper-flash libpurple-meanwhile
+yaourt -S --noconfirm downgrade duply chromium-pepper-flash libpurple-meanwhile deb2targz
 EOF
 fi
 
