@@ -306,36 +306,9 @@ sudo pacman -U package-query-*.pkg.tar.xz
 cd ../yaourt
 makepkg -s
 sudo pacman -U yaourt-*.pkg.tar.xz 
-yaourt -S --noconfirm downgrade duply chromium-pepper-flash libpurple-meanwhile deb2targz
-EOF
-fi
-
-  ## GRUB /etc/grub.d/10_linux patch
-  if [[ ! -f "/root/10_linux.patch" ]]; then
-    cat << 'EOF' > /root/10_linux.patch
---- 10_linux.orig	2014-05-14 01:22:27.000000000 -0500
-+++ 10_linux	2014-06-21 13:20:37.816869963 -0500
-@@ -177,7 +177,16 @@
- 
- is_top_level=true
- while [ "x$list" != "x" ] ; do
--  linux=`version_find_latest $list`
-+  # version_find_latest returns 'linux-lts' before 'linux' on the average
-+  # Arch install of these two kernels, we'll first check if there are any
-+  # numerics in the kernels, and if not just pop them off the stack in
-+  # natural alpha sorting order.
-+  if [ $(echo $list | grep -q '[0-9]') ]; then
-+    linux=`version_find_latest $list`
-+  else
-+    artmp=($list)
-+    linux=${artmp[0]}
-+  fi
-   gettext_printf "Found linux image: %s\n" "$linux" >&2
-   basename=`basename $linux`
-   dirname=`dirname $linux`
+yaourt -S --noconfirm downgrade duply chromium-pepper-flash libpurple-meanwhile deb2targz petrified
 EOF
   fi
-
   touch /root/.archmate/stage-6.done
 else
   echo " - /root/.archmate/stage-6.done found, skipping."
