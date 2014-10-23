@@ -54,7 +54,7 @@ GRUB_BIOS_DISK="/dev/sda"
 GRUB_UEFI_PART="/dev/sda1"
 
 # be careful changing this
-PKG_CORE="grub linux-headers linux-lts linux-lts-headers os-prober"
+PKG_CORE="grub linux-headers linux-lts linux-lts-headers os-prober intel-ucode"
 
 # can be tuned - includes all video drivers, etc.
 PKG_XORG="xorg xorg-drivers xorg-xinit xorg-server-utils xorg-twm xorg-xclock xorg-utils xterm alsa-utils gnu-free-fonts mesa ttf-dejavu ttf-liberation"
@@ -313,6 +313,33 @@ echo
 echo "== Stage 7: Enabling system services =="
 
 if [[ ! -f /root/.archmate/stage-7.done ]]; then
+
+  ## GRUB /etc/grub.d/10_linux Intel Microcode patch
+  ## https://wiki.archlinux.org/index.php/Microcode
+  if [[ ! -f "/root/10_linux.intel" ]]; then
+    cat << 'INTELEOF' > /root/10_linux.intel
+--- 10_linux.orig	2014-10-23 08:26:14.057536791 -0500
++++ 10_linux	2014-10-23 08:28:48.723462440 -0500
+@@ -134,11 +134,16 @@
+ 	linux	${rel_dirname}/${basename} root=${linux_root_device_thisversion} rw ${args}
+ EOF
+   if test -n "${initrd}" ; then
++    if test -f "${dirname}/intel-ucode.img"; then
++        ucode="${rel_dirname}/intel-ucode.img "
++    else
++        ucode=
++    fi
+     # TRANSLATORS: ramdisk isn't identifier. Should be translated.
+     message="$(gettext_printf "Loading initial ramdisk ...")"
+     sed "s/^/$submenu_indentation/" << EOF
+ 	echo	'$(echo "$message" | grub_quote)'
+-	initrd	${rel_dirname}/${initrd}
++	initrd	${ucode}${rel_dirname}/${initrd}
+ EOF
+   fi
+   sed "s/^/$submenu_indentation/" << EOF
+INTELEOF
+  fi
 
   if [[ ! -f /etc/iptables/iptables.rules ]] && \
      [[ -f /etc/iptables/simple_firewall.rules ]]; then
