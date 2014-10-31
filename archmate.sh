@@ -351,7 +351,7 @@ INTELEOF
   systemctl -q enable cronie.service
   systemctl -q enable iptables.service
   systemctl -q enable sshd.service
-  systemctl -q enable cups.service
+  systemctl -q enable org.cups.cupsd.service
   systemctl -q enable ntpd.service
   systemctl -q disable dhcpcd.service
 
