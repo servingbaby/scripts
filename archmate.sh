@@ -22,11 +22,21 @@ VBOXGUEST=false
 ### BOTOP - DO NOT REMOVE OR ALTER THIS LINE ###
 ## These are typically done by hand based on partitioning, etc.
 #
+## MBR Style
+# swapon /dev/mapper/vglocal-swap
 # mount /dev/mapper/vglocal-root /mnt
 # mkdir /mnt/{boot,home}
-# mount /dev/sda1 /mnt/boot
 # mount /dev/mapper/vglocal-home /mnt/home
+# mount /dev/sda1 /mnt/boot
+#
+## UEFI Style
 # swapon /dev/mapper/vglocal-swap
+# mount /dev/mapper/vglocal-root /mnt
+# mkdir /mnt/{boot,home}
+# mount /dev/mapper/vglocal-home /mnt/home
+# mount /dev/sda2 /mnt/boot
+# mkdir /mnt/boot/efi
+# mount /dev/sda1 /mnt/boot/efi
 #
 # cp /etc/pacman.d/mirrorlist{,.bak}
 # grep -A1 "United States" /etc/pacman.d/mirrorlist.bak | grep -v "^--" > \
@@ -191,9 +201,9 @@ EOF
   elif [[ "${GRUB_MODE}" == "uefi" ]]; then
     pacman -S --noconfirm dosfstools efibootmgr
     [[ $? -ne 0 ]] && myexit "pacman error - exiting."
-    mkdir /boot/efi
-    mount ${GRUB_UEFI_PART} /boot/efi
-    grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=grub --recheck --debug
+    grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=arch_grub --recheck --debug
+    mkdir -p /boot/efi/EFI/boot
+    cp -a /boot/efi/EFI/arch_grub/grubx64.efi /boot/efi/EFI/boot/bootx64.efi
   fi
   grub-mkconfig -o /boot/grub/grub.cfg
   ROOT_PART=$(grub-probe --target=device /)
@@ -313,33 +323,6 @@ echo
 echo "== Stage 7: Enabling system services =="
 
 if [[ ! -f /root/.archmate/stage-7.done ]]; then
-
-  ## GRUB /etc/grub.d/10_linux Intel Microcode patch
-  ## https://wiki.archlinux.org/index.php/Microcode
-  if [[ ! -f "/root/10_linux.intel" ]]; then
-    cat << 'INTELEOF' > /root/10_linux.intel
---- 10_linux.orig	2014-10-23 08:26:14.057536791 -0500
-+++ 10_linux	2014-10-23 08:28:48.723462440 -0500
-@@ -134,11 +134,16 @@
- 	linux	${rel_dirname}/${basename} root=${linux_root_device_thisversion} rw ${args}
- EOF
-   if test -n "${initrd}" ; then
-+    if test -f "${dirname}/intel-ucode.img"; then
-+        ucode="${rel_dirname}/intel-ucode.img "
-+    else
-+        ucode=
-+    fi
-     # TRANSLATORS: ramdisk isn't identifier. Should be translated.
-     message="$(gettext_printf "Loading initial ramdisk ...")"
-     sed "s/^/$submenu_indentation/" << EOF
- 	echo	'$(echo "$message" | grub_quote)'
--	initrd	${rel_dirname}/${initrd}
-+	initrd	${ucode}${rel_dirname}/${initrd}
- EOF
-   fi
-   sed "s/^/$submenu_indentation/" << EOF
-INTELEOF
-  fi
 
   if [[ ! -f /etc/iptables/iptables.rules ]] && \
      [[ -f /etc/iptables/simple_firewall.rules ]]; then
