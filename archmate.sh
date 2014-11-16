@@ -16,8 +16,18 @@
 HOSTNAME="myhostname"
 USERNAME="myusername"
 
+# For ${USERNAME} what will be passed to useradd
+#  - 'wheel' will be added to /etc/sudoers
+#  - 'vboxusers' will be added dynamically
+USER_PGRP="users"
+USER_SGRP="wheel,storage,power,wireshark"
+USER_SHLL="/bin/bash"
+
 # Set this to true if this is a Virtualbox guest
 VBOXGUEST=false
+
+# Set this to true if this is a Virtualbox host
+VBOXHOST=false
 
 ### BOTOP - DO NOT REMOVE OR ALTER THIS LINE ###
 ## These are typically done by hand based on partitioning, etc.
@@ -73,7 +83,10 @@ PKG_XORG="xorg xorg-drivers xorg-xinit xorg-server-utils xorg-twm xorg-xclock xo
 PKG_XDEL="font-misc-ethiopic xorg-fonts-100dpi xorg-fonts-75dpi"
 
 # if VBOXGUEST=true
-PKG_VBOX="virtualbox-guest-utils virtualbox-guest-dkms virtualbox-guest-modules virtualbox-guest-modules-lts"
+PKG_GVBOX="virtualbox-guest-utils virtualbox-guest-dkms virtualbox-guest-modules virtualbox-guest-modules-lts"
+
+# if VBOXHOST=true
+PKG_HVBOX="virtualbox virtualbox-host-dkms virtualbox-host-modules virtualbox-host-modules-lts"
 
 # CLI stuff
 PKG_CLI="abs alsa-firmware base-devel bash-completion bc bluez bluez-firmware cadaver chrony cpio cronie cups cups-filters cups-pdf cups-pk-helper dcfldd dhclient dmidecode dnsutils duplicity ethtool expect ffmpeg freerdp gdisk git gnu-netcat id3v2 iftop ipw2100-fw ipw2200-fw iw kexec-tools lame lsof mailx mplayer mutt namcap net-tools nethogs nfs-utils nmap ntfs-3g openldap openssh p7zip parted perl-mime-lite perl-xml-simple pkgstats pwgen python-pexpect python-setuptools python-yaml python2 python2-boto python2-pexpect python2-setuptools python2-soappy python2-yaml rdesktop rfkill rpcbind rpmextract rsync screen sharutils strace stunnel subversion sudo tcpdump tigervnc traceroute unrar unzip usb_modeswitch vim vim-systemd vlc wget whois wireshark-cli zip"
@@ -217,17 +230,30 @@ fi
 
 ## STAGE 4 ##
 echo
-echo "== Stage 4: Installing base Xorg =="
+echo "== Stage 4: Installing base Xorg and Virtualbox =="
 
 if [[ ! -f /root/.archmate/stage-4.done ]]; then
+
+  # base X.org
   pacman -S --noconfirm ${PKG_XORG}
   [[ $? -ne 0 ]] && myexit "pacman error - exiting."
 
-  if [[ $VBOXGUEST == true ]]; then
-    echo "Installing Virtualbox guest..."
-    pacman -S --noconfirm ${PKG_VBOX}
+  # Virtualbox Host
+  if [[ $VBOXHOST == true ]]; then
+    echo "Installing Virtualbox Host..."
+    pacman -S --noconfirm ${PKG_HVBOX}
     [[ $? -ne 0 ]] && myexit "pacman error - exiting."
-    cat << 'EOF' > /etc/modules-load.d/virtualbox.conf
+    cat << 'EOF' > /etc/modules-load.d/vboxhost.conf
+vboxdrv
+EOF
+  fi
+
+  # Virtualbox Guest
+  if [[ $VBOXGUEST == true ]]; then
+    echo "Installing Virtualbox Guest..."
+    pacman -S --noconfirm ${PKG_GVBOX}
+    [[ $? -ne 0 ]] && myexit "pacman error - exiting."
+    cat << 'EOF' > /etc/modules-load.d/vboxguest.conf
 vboxguest
 vboxsf
 vboxvideo
@@ -291,7 +317,10 @@ if [[ ! -f /root/.archmate/stage-6.done ]]; then
 
   echo
   echo "== Adding user ${USERNAME} =="
-  useradd -m -g users -G wheel,storage,power,wireshark -s /bin/bash ${USERNAME}
+  if [[ $VBOXHOST == true ]]; then
+    USER_SGRP="${USER_SGRP},vboxusers"
+  fi
+  useradd -m -g ${USER_PGRP} -G ${USER_SGRP} -s ${USER_SHLL} ${USERNAME}
   passwd ${USERNAME}
   echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers
 
@@ -344,9 +373,8 @@ else
 fi
 
 echo
-echo "All done - normal next steps:"
+echo "All done - typical next steps:"
 echo
-
 echo "## configure /etc/chrony.conf to set offline mode (laptop)"
 echo "# alsamixer (change base levels to ~50%)"
 echo
