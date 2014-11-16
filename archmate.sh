@@ -5,12 +5,30 @@
 #
 # 1. boot archlinux-<date>-dual.iso
 # 2. wget -O archmate.sh http://git.io/archmate
-#    curl -Lo archmate.sh http://git.io/archmate
-# 3. bash archmate.sh prep  (extracts 'prep.sh')
-# 4. bash archmate.sh       (after 'arch-chroot /mnt')
 #
-# The prep.sh is handy but not required - the idea is you can replace
-# the content with your own setup to save on a lot of typing.
+# 3. bash archmate.sh amprep      (extracts 'amprep.sh')
+# 4. bash archmate.sh amconf      (extracts 'amconf.sh')
+#
+# 5. vi amprep.sh amconf.sh       (configure)
+# 6. bash amprep.sh               (optional)
+# 7. arch-chroot /mnt
+#
+# 8. cd /root; ./archmate.sh      (in the chroot)
+#
+# amprep.sh is handy but not required - the idea is you can replace
+# the content with your own setup to save on a lot of typing. The
+# included, commented out code will mount and pacstrap, e.g.
+#
+# amconf.sh will be copied to /mnt/root/ with the provided code
+# in amprep.sh if uncommented. Store your own variable settings in
+# this file to avoid editing this script.
+#
+# archmate.sh expects everything mounted, pacstrap run and is being
+# executed from the arch-chroot. (amprep.sh helps with those steps)
+
+######################################################################
+### BOCONF - DO NOT REMOVE OR ALTER THIS LINE
+## USER VARS
 
 # These must be changed
 HOSTNAME="myhostname"
@@ -29,7 +47,53 @@ VBOXGUEST=false
 # Set this to true if this is a Virtualbox host
 VBOXHOST=false
 
-### BOTOP - DO NOT REMOVE OR ALTER THIS LINE ###
+# Various date/time/locale things
+ARCH_TZ="America/Chicago"
+ARCH_LA="en_US"
+ARCH_CP="UTF-8"
+ARCH_KM="us"
+ARCH_VF="latarcyrheb-sun16"
+
+# grub mode ('bios' or 'uefi') and boot disk/partitions
+GRUB_MODE="bios"
+GRUB_BIOS_DISK="/dev/sda"
+GRUB_UEFI_PART="/dev/sda1"
+
+# Be careful changing this
+PKG_CORE="grub linux-headers linux-lts linux-lts-headers os-prober intel-ucode"
+
+# Can be tuned - includes all video drivers, etc.
+PKG_XORG="xorg xorg-drivers xorg-xinit xorg-server-utils xorg-twm xorg-xclock xorg-utils xterm alsa-utils gnu-free-fonts mesa ttf-dejavu ttf-liberation"
+
+# Things that get dragged in by xorg to remove
+PKG_XDEL="font-misc-ethiopic xorg-fonts-100dpi xorg-fonts-75dpi"
+
+# If VBOXGUEST=true
+PKG_GVBOX="virtualbox-guest-utils virtualbox-guest-dkms virtualbox-guest-modules virtualbox-guest-modules-lts"
+
+# If VBOXHOST=true
+PKG_HVBOX="virtualbox virtualbox-host-dkms virtualbox-host-modules virtualbox-host-modules-lts"
+
+# CLI stuff
+PKG_CLI="abs alsa-firmware base-devel bash-completion bc bluez bluez-firmware cadaver chrony cpio cronie cups cups-filters cups-pdf cups-pk-helper dcfldd dhclient dmidecode dnsutils duplicity ethtool expect ffmpeg freerdp gdisk git gnu-netcat id3v2 iftop ipw2100-fw ipw2200-fw iw kexec-tools lame lsof mailx mplayer mutt namcap net-tools nethogs nfs-utils nmap ntfs-3g openldap openssh p7zip parted perl-mime-lite perl-xml-simple pkgstats pwgen python-boto python-pexpect python-requests python-setuptools python-yaml python2 python2-boto python2-pexpect python2-setuptools python2-requests python2-soappy python2-yaml rdesktop rfkill rpcbind rpmextract rsync screen sharutils strace stunnel subversion sudo tcpdump tigervnc traceroute unrar unzip usb_modeswitch vim vim-systemd vlc wget whois wireshark-cli zip"
+
+# X Desktop stuff
+PKG_DWIN="mate mate-extra mate-themes-extras lightdm-gtk2-greeter gnome-keyring gst-plugins-bad gst-plugins-ugly gstreamer0.10-base-plugins gstreamer0.10-ugly gstreamer0.10-ugly-plugins gtk-aurora-engine networkmanager networkmanager-openconnect networkmanager-openvpn networkmanager-pptp networkmanager-vpnc network-manager-applet system-config-printer systemd-ui"
+
+# GUI stuff
+PKG_XAPP="argyllcms brasero chromium easytag feh firefox flashplugin gimp gkrellm gucharmap gvfs-afc gvfs-mtp gvfs-smb libreoffice-fresh pragha pidgin pidgin-otr seahorse thunderbird tk transmission-gtk x11-ssh-askpass xchat wireshark-gtk"
+
+# Where we'll log all actions (in the chroot)
+ACTLOG="/root/archmate.log"
+
+# Which file will override all settings (in the chroot)
+AMCONF="/root/amconf.sh"
+
+### EOCONF - DO NOT REMOVE OR ALTER THIS LINE
+######################################################################
+
+######################################################################
+### BOPREP - DO NOT REMOVE OR ALTER THIS LINE ###
 ## These are typically done by hand based on partitioning, etc.
 #
 ## Common
@@ -51,68 +115,74 @@ VBOXHOST=false
 # genfstab -p /mnt >> /mnt/etc/fstab
 # cp archmate.sh /mnt/root/ && chmod +x /mnt/root/archmate.sh
 # cp pacstrap.log /mnt/root/
+# [ -f "amprep.sh" ] && cp amprep.sh /mnt/root/
+# [ -f "amconf.sh" ] && cp amconf.sh /mnt/root/
 #
 ## arch-chroot /mnt
-### EOTOP - DO NOT REMOVE OR ALTER THIS LINE ###
+### EOPREP - DO NOT REMOVE OR ALTER THIS LINE ###
+######################################################################
 
-# this will bypass the safety check for /etc/locale.conf
-UNSAFE=false
+######################################################################
+## EXTRACTION
 
-# various date/time/locale things
-ARCH_TZ="America/Chicago"
-ARCH_LA="en_US"
-ARCH_CP="UTF-8"
-ARCH_KM="us"
-ARCH_VF="latarcyrheb-sun16"
-
-# grub mode ('bios' or 'uefi') and boot disk/partitions
-GRUB_MODE="bios"
-GRUB_BIOS_DISK="/dev/sda"
-GRUB_UEFI_PART="/dev/sda1"
-
-# be careful changing this
-PKG_CORE="grub linux-headers linux-lts linux-lts-headers os-prober intel-ucode"
-
-# can be tuned - includes all video drivers, etc.
-PKG_XORG="xorg xorg-drivers xorg-xinit xorg-server-utils xorg-twm xorg-xclock xorg-utils xterm alsa-utils gnu-free-fonts mesa ttf-dejavu ttf-liberation"
-
-# Things that get dragged in by xorg to remove
-PKG_XDEL="font-misc-ethiopic xorg-fonts-100dpi xorg-fonts-75dpi"
-
-# if VBOXGUEST=true
-PKG_GVBOX="virtualbox-guest-utils virtualbox-guest-dkms virtualbox-guest-modules virtualbox-guest-modules-lts"
-
-# if VBOXHOST=true
-PKG_HVBOX="virtualbox virtualbox-host-dkms virtualbox-host-modules virtualbox-host-modules-lts"
-
-# CLI stuff
-PKG_CLI="abs alsa-firmware base-devel bash-completion bc bluez bluez-firmware cadaver chrony cpio cronie cups cups-filters cups-pdf cups-pk-helper dcfldd dhclient dmidecode dnsutils duplicity ethtool expect ffmpeg freerdp gdisk git gnu-netcat id3v2 iftop ipw2100-fw ipw2200-fw iw kexec-tools lame lsof mailx mplayer mutt namcap net-tools nethogs nfs-utils nmap ntfs-3g openldap openssh p7zip parted perl-mime-lite perl-xml-simple pkgstats pwgen python-boto python-pexpect python-requests python-setuptools python-yaml python2 python2-boto python2-pexpect python2-setuptools python2-requests python2-soappy python2-yaml rdesktop rfkill rpcbind rpmextract rsync screen sharutils strace stunnel subversion sudo tcpdump tigervnc traceroute unrar unzip usb_modeswitch vim vim-systemd vlc wget whois wireshark-cli zip"
-
-# X Desktop stuff
-PKG_DWIN="mate mate-extra mate-themes-extras lightdm-gtk2-greeter gnome-keyring gst-plugins-bad gst-plugins-ugly gstreamer0.10-base-plugins gstreamer0.10-ugly gstreamer0.10-ugly-plugins gtk-aurora-engine networkmanager networkmanager-openconnect networkmanager-openvpn networkmanager-pptp networkmanager-vpnc network-manager-applet system-config-printer systemd-ui"
-
-# GUI stuffs
-PKG_XAPP="argyllcms brasero chromium easytag feh firefox flashplugin gimp gkrellm gucharmap gvfs-afc gvfs-mtp gvfs-smb libreoffice-fresh pragha pidgin pidgin-otr seahorse thunderbird tk transmission-gtk x11-ssh-askpass xchat wireshark-gtk"
-
-# this will save the top part of this script to "prep.sh" - handy
+# this will save the top part of this script to "amprep.sh" - handy
 # if you wget this script from a boot ISO and want to save the
 # pre-prepared stuff for use that is not done on purpose
-if [[ "$1" == "prep" ]] && [[ -f "archmate.sh" ]]; then
+if [[ "$1" == "amprep" ]] && [[ -f "archmate.sh" ]]; then
   echo
-  echo "== Creating prep.sh and exiting =="
+  echo "== Creating amprep.sh and exiting =="
   echo
-  sed -n '/^### BOTOP/,/^### EOTOP/p' archmate.sh > prep.sh
+  sed -n '/^### BOPREP/,/^### EOPREP/p' archmate.sh > amprep.sh
   exit 2
 fi
 
-##############
-## BEGIN MAGIC
+# this will save the top part of this script to "amconf.sh" - handy
+# if you want to avoid editing this script
+if [[ "$1" == "amconf" ]] && [[ -f "archmate.sh" ]]; then
+  echo
+  echo "== Creating amconf.sh and exiting =="
+  echo
+  sed -n '/^### BOCONF/,/^### EOCONF/p' archmate.sh > amconf.sh
+  exit 2
+fi
+
+######################################################################
+## FUNCTIONS
+
+# if a config exists, read it in
+[ -f "${AMCONF}" ] && source "${AMCONF}"
+
+# trap our signals
+function error_exit {
+  echo "Trapped a kill signal, exiting."
+  exit 99
+}
+trap error_exit SIGHUP SIGINT SIGTERM
 
 # handy exit function
 function myexit() {
   echo "$1"
   exit 1
 }
+
+# run action, log output, return exit code
+# - passing in 'sed' should be avoided
+# - functions can only return 0..254
+# -- set a global to check as needed
+_ACTRET=0
+function logact() {
+  local ACTION
+  ACTION="$*"
+  ${ACTION} 2>&1 | tee -a ${ACTLOG}
+  _ACTRET=${PIPESTATUS[0]}
+  return ${_ACTRET}
+}
+
+######################################################################
+## ERROR CHECKING
+
+# this will bypass the safety check for /etc/locale.conf (debugging)
+UNSAFE=false
 
 # did you edit this script?
 if [[ "${HOSTNAME}" == "myhostname" ]] || [[ "${USERNAME}" == "myusername" ]]
@@ -134,18 +204,36 @@ if [[ -f /etc/locale.conf ]]; then
   fi
 fi
 
+######################################################################
+## MISC SETUP
+
 # we'll store cookies here -- allows this script to run in stages
 [[ ! -d /root/.archmate ]] && mkdir /root/.archmate
 
+# cleaner code below ('#' 70 times)
+_BAR=$(printf '#%.0s' {1..70})
+
+######################################################################
+## STAGES
+
+## LOG START ##
+_DTS=$(date)
+logact echo -e "\n${_BAR}"
+logact echo "${_BAR}"
+logact echo "## Started: ${_DTS}"
+logact echo "${_BAR}"
+logact echo "${_BAR}"
+
 ## STAGE 1 ##
-echo
-echo "== Stage 1: Performing initial setup =="
+logact echo -e "\n${_BAR}"
+logact echo "## Stage 1: Performing initial setup"
+logact echo "${_BAR}"
 
 if [[ ! -f /root/.archmate/stage-1.done ]]; then
   # Language etc.
   export LANG="${ARCH_LA}.${ARCH_CP}"
   echo "${ARCH_LA}.${ARCH_CP} ${ARCH_CP}" >> /etc/locale.gen
-  locale-gen
+  logact locale-gen
   cat << EOF > /etc/locale.conf
 LANG="${ARCH_LA}.${ARCH_CP}"
 LC_COLLATE="C"
@@ -157,44 +245,46 @@ FONT="${ARCH_VF}"
 EOF
 
   # time/date
-  ln -s /usr/share/zoneinfo/${ARCH_TZ} /etc/localtime
-  hwclock --systohc --utc
+  logact ln -s /usr/share/zoneinfo/${ARCH_TZ} /etc/localtime
+  logact hwclock --systohc --utc
   echo ${HOSTNAME} > /etc/hostname
-  hostname ${HOSTNAME}
+  logact hostname ${HOSTNAME}
 
   touch /root/.archmate/stage-1.done
 else
-  echo " - /root/.archmate/stage-1.done found, skipping."
+  logact echo " - /root/.archmate/stage-1.done found, skipping."
 fi
 
 ## STAGE 2 ##
-echo
-echo "== stage 2: Installing select core packages =="
+logact echo -e "\n${_BAR}"
+logact echo "## Stage 2: Installing select core packages"
+logact echo "${_BAR}"
 
 if [[ ! -f /root/.archmate/stage-2.done ]]; then
-  pacman -Sy --noconfirm
+  logact pacman -Sy --noconfirm --noprogressbar
   [[ $? -ne 0 ]] && myexit "pacman error - exiting."
-  pacman -S --noconfirm ${PKG_CORE}
+  logact pacman -S --noconfirm --noprogressbar ${PKG_CORE}
   [[ $? -ne 0 ]] && myexit "pacman error - exiting."
 
   touch /root/.archmate/stage-2.done
 else
-  echo " - /root/.archmate/stage-2.done found, skipping."
+  logact echo " - /root/.archmate/stage-2.done found, skipping."
 fi
 
 # Prevent the screen going blank during install
 setterm -powersave off -powerdown 0 -blank 0
 
 ## STAGE 3 ##
-echo
-echo "== Stage 3: Setting up GRUB and the kernels =="
+logact echo -e "\n${_BAR}"
+logact echo "## Stage 3: Setting up GRUB and the kernels"
+logact echo "${_BAR}"
 
 if [[ ! -f /root/.archmate/stage-3.done ]]; then
   # add lvm2 hook
   sed -i.bak -r 's/^HOOKS=(.*)block(.*)/HOOKS=\1block lvm2\2/g' \
     /etc/mkinitcpio.conf
-  mkinitcpio -p linux
-  mkinitcpio -p linux-lts
+  logact mkinitcpio -p linux
+  logact mkinitcpio -p linux-lts
 
   # GRUB our way
   sed -i.bak -r -e 's/^GRUB_DEFAULT=(.*)/#GRUB_DEFAULT=\1/g' \
@@ -207,77 +297,82 @@ GRUB_SAVEDEFAULT="true"
 GRUB_DISABLE_SUBMENU=y
 EOF
   if [[ "${GRUB_MODE}" == "bios" ]]; then
-    grub-install --target=i386-pc --recheck ${GRUB_BIOS_DISK}
+    logact grub-install --target=i386-pc --recheck ${GRUB_BIOS_DISK}
   elif [[ "${GRUB_MODE}" == "uefi" ]]; then
-    pacman -S --noconfirm dosfstools efibootmgr
+    logact pacman -S --noconfirm --noprogressbar dosfstools efibootmgr
     [[ $? -ne 0 ]] && myexit "pacman error - exiting."
-    grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=arch_grub --recheck --debug
-    mkdir -p /boot/efi/EFI/boot
-    cp -a /boot/efi/EFI/arch_grub/grubx64.efi /boot/efi/EFI/boot/bootx64.efi
+    logact grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=arch_grub --recheck --debug
+    logact mkdir -p /boot/efi/EFI/boot
+    logact cp -a /boot/efi/EFI/arch_grub/grubx64.efi /boot/efi/EFI/boot/bootx64.efi
   fi
-  grub-mkconfig -o /boot/grub/grub.cfg
+  logact grub-mkconfig -o /boot/grub/grub.cfg
   ROOT_PART=$(grub-probe --target=device /)
   ROOT_UUID=$(grub-probe --device ${ROOT_PART} --target=fs_uuid)
-  grub-set-default "gnulinux-linux-advanced-${ROOT_UUID}"
+  logact grub-set-default "gnulinux-linux-advanced-${ROOT_UUID}"
 
   touch /root/.archmate/stage-3.done
 else
-  echo " - /root/.archmate/stage-3.done found, skipping."
+  logact echo " - /root/.archmate/stage-3.done found, skipping."
 fi
 
 ## STAGE 4 ##
-echo
-echo "== Stage 4: Installing base Xorg and Virtualbox =="
+logact echo -e "\n${_BAR}"
+logact echo "## Stage 4: Installing base Xorg and Virtualbox"
+logact echo "${_BAR}"
 
 if [[ ! -f /root/.archmate/stage-4.done ]]; then
 
   # base X.org
-  pacman -S --noconfirm ${PKG_XORG}
+  logact pacman -S --noconfirm --noprogressbar ${PKG_XORG}
   [[ $? -ne 0 ]] && myexit "pacman error - exiting."
 
   # Virtualbox Host
   if [[ $VBOXHOST == true ]]; then
-    echo "Installing Virtualbox Host..."
-    pacman -S --noconfirm ${PKG_HVBOX}
+    logact echo "Installing Virtualbox Host..."
+    logact pacman -S --noconfirm --noprogressbar ${PKG_HVBOX}
     [[ $? -ne 0 ]] && myexit "pacman error - exiting."
     cat << 'EOF' > /etc/modules-load.d/vboxhost.conf
 vboxdrv
 EOF
+    USER_SGRP="${USER_SGRP},vboxusers"
+    logact systemctl enable dkms
   fi
 
   # Virtualbox Guest
   if [[ $VBOXGUEST == true ]]; then
-    echo "Installing Virtualbox Guest..."
-    pacman -S --noconfirm ${PKG_GVBOX}
+    logact echo "Installing Virtualbox Guest..."
+    logact pacman -S --noconfirm --noprogressbar ${PKG_GVBOX}
     [[ $? -ne 0 ]] && myexit "pacman error - exiting."
     cat << 'EOF' > /etc/modules-load.d/vboxguest.conf
 vboxguest
 vboxsf
 vboxvideo
 EOF
-    systemctl -q enable vboxservice
+    logact systemctl enable dkms
+    logact systemctl enable vboxservice
   fi
 
   touch /root/.archmate/stage-4.done
 else
-  echo " - /root/.archmate/stage-4.done found, skipping."
+  logact echo " - /root/.archmate/stage-4.done found, skipping."
 fi
 
 ## STAGE 5 ##
-echo
-echo "== Stage 5: Installing all other packages =="
+logact echo -e "\n${_BAR}"
+logact echo "## Stage 5: Installing all other packages"
+logact echo "${_BAR}"
 
 if [[ ! -f /root/.archmate/stage-5.done ]]; then
-  pacman -S --noconfirm ${PKG_CLI} ${PKG_DWIN} ${PKG_XAPP}
+  logact pacman -S --noconfirm --noprogressbar ${PKG_CLI} ${PKG_DWIN} ${PKG_XAPP}
   [[ $? -ne 0 ]] && myexit "pacman error - exiting."
 
-  pacman -Rnu --noconfirm ${PKG_XDEL}
+  logact pacman -Rnu --noconfirm ${PKG_XDEL}
   [[ $? -ne 0 ]] && myexit "pacman error - exiting."
 
   # clean up a little
-  pacman -Sc --noconfirm
+  logact pacman -Sc --noconfirm
 
-  mv /etc/lightdm/lightdm-gtk-greeter.conf{,.bak}
+  logact mv /etc/lightdm/lightdm-gtk-greeter.conf{,.bak}
   cat << 'EOF' > /etc/lightdm/lightdm-gtk-greeter.conf
 [greeter]
 background=#152233
@@ -296,33 +391,30 @@ picture-filename=''
 primary-color='#152233'
 secondary-color='#000000'
 EOF
-  glib-compile-schemas /usr/share/glib-2.0/schemas/
+  logact glib-compile-schemas /usr/share/glib-2.0/schemas/
 
   touch /root/.archmate/stage-5.done
 else
-  echo " - /root/.archmate/stage-5.done found, skipping."
+  logact echo " - /root/.archmate/stage-5.done found, skipping."
 fi
 
 ## STAGE 6 ##
-echo
-echo "== Stage 6: User Setup =="
+logact echo -e "\n${_BAR}"
+logact echo "## Stage 6: User Setup"
+logact echo "${_BAR}"
 
 if [[ ! -f /root/.archmate/stage-6.done ]]; then
-  echo
-  echo "== Setting root password =="
+  logact echo -e "\n== Setting root password =="
   passwd root
 
-  echo
-  echo "== Adding user ${USERNAME} =="
-  if [[ $VBOXHOST == true ]]; then
-    USER_SGRP="${USER_SGRP},vboxusers"
-  fi
-  useradd -m -g ${USER_PGRP} -G ${USER_SGRP} -s ${USER_SHLL} ${USERNAME}
+  logact echo -e "\n== Adding user ${USERNAME} =="
+  logact useradd -m -g ${USER_PGRP} -G ${USER_SGRP} -s ${USER_SHLL} ${USERNAME}
   passwd ${USERNAME}
   echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers
 
   ## AUR setup as a user later
   if [[ ! -f "/home/${USERNAME}/aur_setup.sh" ]]; then
+    logact echo -e "\n== Creating /home/${USERNAME}/aur_setup.sh =="
     cat << 'EOF' > /home/${USERNAME}/aur_setup.sh
 mkdir builds
 cd builds/
@@ -341,44 +433,49 @@ EOF
   fi
   touch /root/.archmate/stage-6.done
 else
-  echo " - /root/.archmate/stage-6.done found, skipping."
+  logact echo " - /root/.archmate/stage-6.done found, skipping."
 fi
 
 ## STAGE 7 ##
-echo
-echo "== Stage 7: Enabling system services =="
+logact echo -e "\n${_BAR}"
+logact echo "## Stage 7: Enabling system services"
+logact echo "${_BAR}"
 
 if [[ ! -f /root/.archmate/stage-7.done ]]; then
 
   if [[ ! -f /etc/iptables/iptables.rules ]] && \
      [[ -f /etc/iptables/simple_firewall.rules ]]; then
-    cp /etc/iptables/simple_firewall.rules /etc/iptables/iptables.rules
+    logact cp /etc/iptables/simple_firewall.rules /etc/iptables/iptables.rules
   fi
   sed -i.bak 's/^#SystemMaxUse=/SystemMaxUse=50M/g' /etc/systemd/journald.conf
-  systemctl -q enable lightdm.service
-  systemctl -q enable NetworkManager.service
-  systemctl -q enable cronie.service
-  systemctl -q enable iptables.service
-  systemctl -q enable sshd.service
-  systemctl -q enable org.cups.cupsd.service
-  systemctl -q enable chrony.service
-  systemctl -q disable dhcpcd.service
+  logact systemctl enable lightdm.service
+  logact systemctl enable NetworkManager.service
+  logact systemctl enable cronie.service
+  logact systemctl enable iptables.service
+  logact systemctl enable sshd.service
+  logact systemctl enable org.cups.cupsd.service
+  logact systemctl enable chrony.service
+  logact systemctl disable dhcpcd.service
 
   touch /root/.archmate/stage-7.done
 else
-  echo " - /root/.archmate/stage-7.done found, skipping."
+  logact echo " - /root/.archmate/stage-7.done found, skipping."
 fi
 
-echo
-echo "All done - typical next steps:"
-echo
-echo "## configure /etc/chrony.conf to set offline mode (laptop)"
-echo "# alsamixer (change base levels to ~50%)"
-echo
-echo "# exit (the chroot)"
-echo "# umount -R /mnt"
-echo "# reboot"
-echo
+## LOG FINISH ##
+_DTS=$(date)
+logact echo -e "\n${_BAR}"
+logact echo "${_BAR}"
+logact echo "## Finished: ${_DTS}"
+logact echo "${_BAR}"
+logact echo "${_BAR}"
+
+logact echo -e "Typical next steps:\n"
+logact echo "# configure /etc/chrony.conf to set offline mode (laptop)"
+logact echo "# alsamixer (change base levels to ~50%)"
+logact echo -e "\n# exit (the chroot)"
+logact echo "# umount -R /mnt"
+logact echo -e "# reboot\n"
 
 exit 0
 
