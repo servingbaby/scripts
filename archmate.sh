@@ -32,28 +32,25 @@ VBOXHOST=false
 ### BOTOP - DO NOT REMOVE OR ALTER THIS LINE ###
 ## These are typically done by hand based on partitioning, etc.
 #
-## MBR Style
+## Common
 # swapon /dev/mapper/vglocal-swap
 # mount /dev/mapper/vglocal-root /mnt
 # mkdir /mnt/{boot,home}
 # mount /dev/mapper/vglocal-home /mnt/home
+#
+## MBR Style
 # mount /dev/sda1 /mnt/boot
 #
 ## UEFI Style
-# swapon /dev/mapper/vglocal-swap
-# mount /dev/mapper/vglocal-root /mnt
-# mkdir /mnt/{boot,home}
-# mount /dev/mapper/vglocal-home /mnt/home
 # mount /dev/sda2 /mnt/boot
 # mkdir /mnt/boot/efi
 # mount /dev/sda1 /mnt/boot/efi
 #
-# cp /etc/pacman.d/mirrorlist{,.bak}
-# grep -A1 "United States" /etc/pacman.d/mirrorlist.bak | grep -v "^--" > \
-#   /etc/pacman.d/mirrorlist
-# pacstrap /mnt base
+## Pacstrap
+# pacstrap /mnt base --noprogressbar 2>&1 | tee -a pacstrap.log
 # genfstab -p /mnt >> /mnt/etc/fstab
 # cp archmate.sh /mnt/root/ && chmod +x /mnt/root/archmate.sh
+# cp pacstrap.log /mnt/root/
 #
 ## arch-chroot /mnt
 ### EOTOP - DO NOT REMOVE OR ALTER THIS LINE ###
