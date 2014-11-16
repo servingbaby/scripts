@@ -5,6 +5,7 @@ ACTLOG="/tmp/test_logact.log"
 [ -f ${ACTLOG} ] && rm ${ACTLOG}
 
 # Run action, log output, return exit code
+# - passing in 'sed' should be avoided
 # - functions can only return 0..254
 # -- set a global to check as needed
 _ACTRET=0
