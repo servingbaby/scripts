@@ -218,16 +218,10 @@ _BAR=$(printf '#%.0s' {1..70})
 
 ## LOG START ##
 _DTS=$(date)
-logact echo -e "\n${_BAR}"
-logact echo "${_BAR}"
-logact echo "## Started: ${_DTS}"
-logact echo "${_BAR}"
-logact echo "${_BAR}"
+logact echo -e "\n${_BAR}\n${_BAR}\n## Started: ${_DTS}\n${_BAR}\n${_BAR}"
 
 ## STAGE 1 ##
-logact echo -e "\n${_BAR}"
-logact echo "## Stage 1: Performing initial setup"
-logact echo "${_BAR}"
+logact echo -e "\n${_BAR}\n## Stage 1: Performing initial setup\n${_BAR}"
 
 if [[ ! -f /root/.archmate/stage-1.done ]]; then
   # Language etc.
@@ -256,9 +250,7 @@ else
 fi
 
 ## STAGE 2 ##
-logact echo -e "\n${_BAR}"
-logact echo "## Stage 2: Installing select core packages"
-logact echo "${_BAR}"
+logact echo -e "\n${_BAR}\n## Stage 2: Installing core packages\n${_BAR}"
 
 if [[ ! -f /root/.archmate/stage-2.done ]]; then
   logact pacman -Sy --noconfirm --noprogressbar
@@ -275,9 +267,7 @@ fi
 setterm -powersave off -powerdown 0 -blank 0
 
 ## STAGE 3 ##
-logact echo -e "\n${_BAR}"
-logact echo "## Stage 3: Setting up GRUB and the kernels"
-logact echo "${_BAR}"
+logact echo -e "\n${_BAR}\n## Stage 3: Setting up GRUB and kernels\n${_BAR}"
 
 if [[ ! -f /root/.archmate/stage-3.done ]]; then
   # add lvm2 hook
@@ -316,9 +306,7 @@ else
 fi
 
 ## STAGE 4 ##
-logact echo -e "\n${_BAR}"
-logact echo "## Stage 4: Installing base Xorg and Virtualbox"
-logact echo "${_BAR}"
+logact echo -e "\n${_BAR}\n## Stage 4: Installing Xorg and Virtualbox\n${_BAR}"
 
 if [[ ! -f /root/.archmate/stage-4.done ]]; then
 
@@ -358,9 +346,7 @@ else
 fi
 
 ## STAGE 5 ##
-logact echo -e "\n${_BAR}"
-logact echo "## Stage 5: Installing all other packages"
-logact echo "${_BAR}"
+logact echo -e "\n${_BAR}\n## Stage 5: Installing all other packages\n${_BAR}"
 
 if [[ ! -f /root/.archmate/stage-5.done ]]; then
   logact pacman -S --noconfirm --noprogressbar ${PKG_CLI} ${PKG_DWIN} ${PKG_XAPP}
@@ -399,9 +385,7 @@ else
 fi
 
 ## STAGE 6 ##
-logact echo -e "\n${_BAR}"
-logact echo "## Stage 6: User Setup"
-logact echo "${_BAR}"
+logact echo -e "\n${_BAR}\n## Stage 6: User Setup\n${_BAR}"
 
 if [[ ! -f /root/.archmate/stage-6.done ]]; then
   logact echo -e "\n== Setting root password =="
@@ -437,9 +421,7 @@ else
 fi
 
 ## STAGE 7 ##
-logact echo -e "\n${_BAR}"
-logact echo "## Stage 7: Enabling system services"
-logact echo "${_BAR}"
+logact echo -e "\n${_BAR}\n## Stage 7: Enabling system services\n${_BAR}"
 
 if [[ ! -f /root/.archmate/stage-7.done ]]; then
 
@@ -464,18 +446,12 @@ fi
 
 ## LOG FINISH ##
 _DTS=$(date)
-logact echo -e "\n${_BAR}"
-logact echo "${_BAR}"
-logact echo "## Finished: ${_DTS}"
-logact echo "${_BAR}"
-logact echo "${_BAR}"
+logact echo -e "\n${_BAR}\n${_BAR}\n## Finished: ${_DTS}\n${_BAR}\n${_BAR}"
 
 logact echo -e "Typical next steps:\n"
 logact echo "# configure /etc/chrony.conf to set offline mode (laptop)"
 logact echo "# alsamixer (change base levels to ~50%)"
-logact echo -e "\n# exit (the chroot)"
-logact echo "# umount -R /mnt"
-logact echo -e "# reboot\n"
+logact echo -e "\n# exit (the chroot)\n# umount -R /mnt\n# reboot\n"
 
 exit 0
 
