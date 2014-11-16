@@ -92,10 +92,10 @@ PKG_HVBOX="virtualbox virtualbox-host-dkms virtualbox-host-modules virtualbox-ho
 PKG_CLI="abs alsa-firmware base-devel bash-completion bc bluez bluez-firmware cadaver chrony cpio cronie cups cups-filters cups-pdf cups-pk-helper dcfldd dhclient dmidecode dnsutils duplicity ethtool expect ffmpeg freerdp gdisk git gnu-netcat id3v2 iftop ipw2100-fw ipw2200-fw iw kexec-tools lame lsof mailx mplayer mutt namcap net-tools nethogs nfs-utils nmap ntfs-3g openldap openssh p7zip parted perl-mime-lite perl-xml-simple pkgstats pwgen python-pexpect python-setuptools python-yaml python2 python2-boto python2-pexpect python2-setuptools python2-soappy python2-yaml rdesktop rfkill rpcbind rpmextract rsync screen sharutils strace stunnel subversion sudo tcpdump tigervnc traceroute unrar unzip usb_modeswitch vim vim-systemd vlc wget whois wireshark-cli zip"
 
 # X Desktop stuff
-PKG_DWIN="mate mate-extra mate-themes-extras lightdm-gtk2-greeter gnome-keyring gst-plugins-bad gst-plugins-ugly gstreamer0.10-base-plugins gstreamer0.10-ugly gstreamer0.10-ugly-plugins gtk-aurora-engine networkmanager networkmanager-openconnect networkmanager-openvpn networkmanager-pptp networkmanager-vpnc network-manager-applet networkmanager-dispatcher-chrony system-config-printer systemd-ui"
+PKG_DWIN="mate mate-extra mate-themes-extras lightdm-gtk2-greeter gnome-keyring gst-plugins-bad gst-plugins-ugly gstreamer0.10-base-plugins gstreamer0.10-ugly gstreamer0.10-ugly-plugins gtk-aurora-engine networkmanager networkmanager-openconnect networkmanager-openvpn networkmanager-pptp networkmanager-vpnc network-manager-applet system-config-printer systemd-ui"
 
 # GUI stuffs
-PKG_XAPP="argyllcms brasero chromium easytag feh firefox flashplugin gimp gkrellm gucharmap gvfs-afc gvfs-mtp gvfs-smb libreoffice-calc libreoffice-draw libreoffice-en-US libreoffice-impress libreoffice-gnome libreoffice-writer mate-mplayer pragha pidgin pidgin-otr seahorse thunderbird tk transmission-gtk x11-ssh-askpass xchat wireshark-gtk"
+PKG_XAPP="argyllcms brasero chromium easytag feh firefox flashplugin gimp gkrellm gucharmap gvfs-afc gvfs-mtp gvfs-smb libreoffice-fresh pragha pidgin pidgin-otr seahorse thunderbird tk transmission-gtk x11-ssh-askpass xchat wireshark-gtk"
 
 # this will save the top part of this script to "prep.sh" - handy
 # if you wget this script from a boot ISO and want to save the
@@ -339,7 +339,7 @@ sudo pacman -U package-query-*.pkg.tar.xz
 cd ../yaourt
 makepkg -s
 sudo pacman -U yaourt-*.pkg.tar.xz 
-yaourt -S --noconfirm downgrade duply chromium-pepper-flash libpurple-meanwhile deb2targz petrified
+yaourt -S --noconfirm downgrade duply chromium-pepper-flash libpurple-meanwhile deb2targz networkmanager-dispatcher-chrony petrified
 EOF
   fi
   touch /root/.archmate/stage-6.done
