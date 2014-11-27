@@ -69,7 +69,7 @@ PKG_XORG="xorg xorg-drivers xorg-xinit xorg-server-utils xorg-twm xorg-xclock xo
 PKG_XDEL="font-misc-ethiopic xorg-fonts-100dpi xorg-fonts-75dpi"
 
 # If VBOXGUEST=true
-PKG_GVBOX="virtualbox-guest-utils virtualbox-guest-dkms virtualbox-guest-modules virtualbox-guest-modules-lts"
+PKG_GVBOX="virtualbox-guest-utils virtualbox-guest-dkms virtualbox-guest-modules virtualbox-guest-modules-lts rng-tools"
 
 # If VBOXHOST=true
 PKG_HVBOX="virtualbox virtualbox-host-dkms virtualbox-host-modules virtualbox-host-modules-lts"
@@ -338,6 +338,7 @@ vboxvideo
 EOF
     logact systemctl enable dkms
     logact systemctl enable vboxservice
+    logact systemctl enable rngd.service
   fi
 
   touch /root/.archmate/stage-4.done
