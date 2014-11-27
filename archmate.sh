@@ -403,18 +403,19 @@ if [[ ! -f /root/.archmate/stage-6.done ]]; then
     cat << 'EOF' > /home/${USERNAME}/aur_setup.sh
 mkdir builds
 cd builds/
-curl -L -O https://aur.archlinux.org/packages/pa/package-query/package-query.tar.gz
-curl -L -O https://aur.archlinux.org/packages/ya/yaourt/yaourt.tar.gz
-tar -zxvf package-query.tar.gz 
-tar -zxvf yaourt.tar.gz 
-cd package-query
+curl -L -O https://aur.archlinux.org/packages/co/cower/cower.tar.gz
+curl -L -O https://aur.archlinux.org/packages/pa/pacaur/pacaur.tar.gz
+tar -zxvf cower.tar.gz 
+tar -zxvf pacaur.tar.gz 
+cd cower
 makepkg -s
-sudo pacman -U package-query-*.pkg.tar.xz 
-cd ../yaourt
+sudo pacman -U cower-*.pkg.tar.xz 
+cd ../pacaur
 makepkg -s
-sudo pacman -U yaourt-*.pkg.tar.xz 
-yaourt -S --noconfirm downgrade duply chromium-pepper-flash libpurple-meanwhile deb2targz networkmanager-dispatcher-chrony petrified
+sudo pacman -U pacaur-*.pkg.tar.xz
+pacaur -S --noconfirm downgrade duply chromium-pepper-flash deb2targz networkmanager-dispatcher-chrony petrified
 EOF
+    chown ${USERNAME}:users /home/${USERNAME}/aur_setup.sh
   fi
   touch /root/.archmate/stage-6.done
 else
