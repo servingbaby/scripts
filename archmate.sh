@@ -69,7 +69,7 @@ PKG_XORG="xorg xorg-drivers xorg-xinit xorg-server-utils xorg-twm xorg-xclock xo
 PKG_XDEL="font-misc-ethiopic xorg-fonts-100dpi xorg-fonts-75dpi"
 
 # If VBOXGUEST=true
-PKG_GVBOX="virtualbox-guest-utils virtualbox-guest-dkms virtualbox-guest-modules virtualbox-guest-modules-lts rng-tools"
+PKG_GVBOX="virtualbox-guest-utils virtualbox-guest-dkms virtualbox-guest-modules virtualbox-guest-modules-lts haveged"
 
 # If VBOXHOST=true
 PKG_HVBOX="virtualbox virtualbox-host-dkms virtualbox-host-modules virtualbox-host-modules-lts"
@@ -323,7 +323,7 @@ if [[ ! -f /root/.archmate/stage-4.done ]]; then
 vboxdrv
 EOF
     USER_SGRP="${USER_SGRP},vboxusers"
-    logact systemctl enable dkms
+    logact systemctl enable dkms.service
   fi
 
   # Virtualbox Guest
@@ -336,9 +336,9 @@ vboxguest
 vboxsf
 vboxvideo
 EOF
-    logact systemctl enable dkms
-    logact systemctl enable vboxservice
-    logact systemctl enable rngd.service
+    logact systemctl enable dkms.service
+    logact systemctl enable vboxservice.service
+    logact systemctl enable haveged.service
   fi
 
   touch /root/.archmate/stage-4.done
@@ -413,7 +413,7 @@ sudo pacman -U cower-*.pkg.tar.xz
 cd ../pacaur
 makepkg -s
 sudo pacman -U pacaur-*.pkg.tar.xz
-pacaur -S --noconfirm downgrade duply chromium-pepper-flash deb2targz networkmanager-dispatcher-chrony petrified
+pacaur -S --noconfirm downgrade duply chromium-pepper-flash networkmanager-dispatcher-chrony petrified
 EOF
     chown ${USERNAME}:users /home/${USERNAME}/aur_setup.sh
   fi
