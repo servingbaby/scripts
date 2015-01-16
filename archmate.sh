@@ -439,6 +439,7 @@ if [[ ! -f /root/.archmate/stage-7.done ]]; then
   logact systemctl enable sshd.service
   logact systemctl enable org.cups.cupsd.service
   logact systemctl enable chrony.service
+  logact systemctl enable bluetooth.service
   logact systemctl disable dhcpcd.service
 
   touch /root/.archmate/stage-7.done
