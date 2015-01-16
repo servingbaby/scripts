@@ -408,7 +408,7 @@ curl -L -O https://aur.archlinux.org/packages/pa/pacaur/pacaur.tar.gz
 tar -zxvf cower.tar.gz 
 tar -zxvf pacaur.tar.gz 
 cd cower
-makepkg -s
+makepkg -s --skippgpcheck
 sudo pacman -U cower-*.pkg.tar.xz 
 cd ../pacaur
 makepkg -s
