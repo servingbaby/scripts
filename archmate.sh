@@ -66,7 +66,7 @@ PKG_CORE="grub linux-headers linux-lts linux-lts-headers os-prober intel-ucode"
 PKG_XORG="xorg xorg-drivers xorg-xinit xorg-server-utils xorg-twm xorg-xclock xorg-utils xterm alsa-utils gnu-free-fonts mesa ttf-dejavu ttf-liberation"
 
 # Things that get dragged in by xorg to remove
-PKG_XDEL="font-misc-ethiopic xorg-fonts-100dpi xorg-fonts-75dpi"
+PKG_XDEL="xorg-fonts-100dpi xorg-fonts-75dpi"
 
 # If VBOXGUEST=true
 PKG_GVBOX="virtualbox-guest-utils virtualbox-guest-dkms virtualbox-guest-modules virtualbox-guest-modules-lts haveged"
