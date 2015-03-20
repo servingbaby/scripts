@@ -438,6 +438,9 @@ if [[ ! -f /root/.archmate/stage-7.done ]]; then
   sed -i.bak 's/^#Storage=.*/Storage=none/g' /etc/systemd/coredump.conf
   echo 'kernel.core_pattern=' > /etc/sysctl.d/50-coredump.conf
 
+  # desktop system, not being able to strace other PIDs is a PITA
+  echo 'kernel.yama.ptrace_scope=0' > /etc/sysctl.d/10-ptrace.conf
+
   logact systemctl enable lightdm.service
   logact systemctl enable NetworkManager.service
   logact systemctl enable cronie.service
