@@ -432,7 +432,12 @@ if [[ ! -f /root/.archmate/stage-7.done ]]; then
      [[ -f /etc/iptables/simple_firewall.rules ]]; then
     logact cp /etc/iptables/simple_firewall.rules /etc/iptables/iptables.rules
   fi
-  sed -i.bak 's/^#SystemMaxUse=/SystemMaxUse=50M/g' /etc/systemd/journald.conf
+
+  # systemd tweaks
+  sed -i.bak 's/^#SystemMaxUse=.*/SystemMaxUse=50M/g' /etc/systemd/journald.conf
+  sed -i.bak 's/^#Storage=.*/Storage=none/g' /etc/systemd/coredump.conf
+  echo 'kernel.core_pattern=' > /etc/sysctl.d/50-coredump.conf
+
   logact systemctl enable lightdm.service
   logact systemctl enable NetworkManager.service
   logact systemctl enable cronie.service
