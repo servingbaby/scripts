@@ -75,13 +75,13 @@ PKG_GVBOX="virtualbox-guest-utils virtualbox-guest-dkms virtualbox-guest-modules
 PKG_HVBOX="virtualbox virtualbox-host-dkms virtualbox-host-modules virtualbox-host-modules-lts"
 
 # CLI stuff
-PKG_CLI="abs alsa-firmware axel base-devel bash-completion bc bluez bluez-firmware cadaver chrony cpio cronie cups cups-filters cups-pdf cups-pk-helper dcfldd dhclient dmidecode dnsutils duplicity ethtool expect ffmpeg freerdp gdisk git gnu-netcat id3v2 iftop ipw2100-fw ipw2200-fw iw kexec-tools lame lsof mailx mplayer mpv mutt namcap net-tools nethogs nfs-utils nmap ntfs-3g openldap openssh p7zip parted perl-mime-lite perl-xml-simple pkgstats pwgen python-boto python-pexpect python-requests python-setuptools python-yaml python2 python2-boto python2-pexpect python2-setuptools python2-requests python2-soappy python2-yaml rdesktop rfkill rpcbind rpmextract rsync screen sharutils strace stunnel subversion sudo tcpdump tigervnc traceroute unrar unzip usb_modeswitch vim vim-systemd vlc wget whois wireshark-cli zip"
+PKG_CLI="abs alsa-firmware axel base-devel bash-completion bc bluez bluez-firmware cadaver chrony cpio cronie cups cups-filters cups-pdf cups-pk-helper dcfldd dhclient dmidecode dnsutils duplicity ethtool expect ffmpeg freerdp gdisk git gnu-netcat id3v2 iftop ipw2100-fw ipw2200-fw iw kexec-tools lame lshw lsof mailx mplayer mpv mutt namcap net-tools nethogs nfs-utils nmap ntfs-3g openldap openssh p7zip parted perl-mime-lite perl-xml-simple pkgstats pwgen python-boto python-pexpect python-requests python-setuptools python-yaml python2 python2-boto python2-pexpect python2-setuptools python2-requests python2-soappy python2-yaml rdesktop rfkill rpcbind rpmextract rsync screen sharutils strace stunnel subversion sudo tcpdump tigervnc traceroute unrar unzip usb_modeswitch vlc wget whois wireshark-cli zip"
 
 # X Desktop stuff
 PKG_DWIN="accountsservice mate mate-extra mate-themes-extras lightdm-gtk-greeter gnome-keyring gst-plugins-bad gst-plugins-ugly gstreamer0.10-base-plugins gstreamer0.10-ugly gstreamer0.10-ugly-plugins gtk-aurora-engine networkmanager networkmanager-openconnect networkmanager-openvpn networkmanager-pptp networkmanager-vpnc network-manager-applet simplescreenrecorder system-config-printer systemd-ui terminator"
 
 # GUI stuff
-PKG_XAPP="argyllcms brasero chromium easytag feh firefox flashplugin geeqie gimp gkrellm gucharmap gvfs-afc gvfs-mtp gvfs-smb hunspell-en hyphen-en libreoffice-fresh pragha pidgin pidgin-otr seahorse thunderbird tk transmission-gtk x11-ssh-askpass xchat wireshark-gtk"
+PKG_XAPP="argyllcms asunder brasero chromium easytag feh firefox flashplugin geeqie gimp gkrellm gucharmap gvfs-afc gvfs-mtp gvfs-smb gvim hunspell-en hyphen-en libreoffice-fresh pragha pidgin pidgin-otr seahorse thunderbird tk transmission-gtk vim-systemd x11-ssh-askpass xchat wireshark-gtk"
 
 # Where we'll log all actions (in the chroot)
 ACTLOG="/root/archmate.log"
@@ -414,7 +414,9 @@ sudo pacman -U cower-*.pkg.tar.xz
 cd ../pacaur
 makepkg -s
 sudo pacman -U pacaur-*.pkg.tar.xz
-pacaur -S --noconfirm downgrade duply chromium-pepper-flash networkmanager-dispatcher-chrony petrified
+pacaur -S --noconfirm downgrade duply networkmanager-dispatcher-chrony petrified
+# chromium-pepper-flash can be "out of date" and missing upstream, expected
+pacaur -S --noconfirm chromium-pepper-flash
 EOF
     chown ${USERNAME}:users /home/${USERNAME}/aur_setup.sh
   fi
