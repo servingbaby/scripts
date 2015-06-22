@@ -52,7 +52,7 @@ ARCH_TZ="America/Chicago"
 ARCH_LA="en_US"
 ARCH_CP="UTF-8"
 ARCH_KM="us"
-ARCH_VF="latarcyrheb-sun16"
+ARCH_VF="eurlatgr"
 
 # grub mode ('bios' or 'uefi') and boot disk/partitions
 GRUB_MODE="bios"
