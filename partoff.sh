@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Calculate the optimal starting partition size for a block device
+# Calculate the optimal starting partition offset for a block device
 
 
 if [[ $# -ne 1 ]] || [[ ! -d /sys/block/${1} ]]; then
