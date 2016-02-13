@@ -63,7 +63,8 @@ fi
 
 echo "Disabling firewalld and enabling iptables/ip6tables..."
 yum -y install iptables-services && ( \
- systemctl stop firewalld && systemctl mask firewalld.service; \
+ systemctl stop firewalld && systemctl disable firewalld; \
+ systemctl mask firewalld.service; \
  systemctl start iptables.service && systemctl enable iptables.service; \
  systemctl start ip6tables.service && systemctl enable ip6tables.service
 )
