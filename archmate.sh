@@ -69,10 +69,10 @@ PKG_XORG="xorg xorg-drivers xorg-xinit xorg-server-utils xorg-twm xorg-xclock xo
 PKG_XDEL="xorg-fonts-100dpi xorg-fonts-75dpi"
 
 # If VBOXGUEST=true
-PKG_GVBOX="virtualbox-guest-utils virtualbox-guest-dkms virtualbox-guest-modules virtualbox-guest-modules-lts haveged"
+PKG_GVBOX="virtualbox-guest-utils virtualbox-guest-dkms haveged"
 
 # If VBOXHOST=true
-PKG_HVBOX="virtualbox virtualbox-host-dkms virtualbox-host-modules virtualbox-host-modules-lts"
+PKG_HVBOX="virtualbox virtualbox-host-dkms"
 
 # CLI stuff
 PKG_CLI="abs alsa-firmware android-udev axel base-devel bash-completion bc bluez bluez-firmware bind-tools cadaver chrony cpio cronie cups cups-filters cups-pdf cups-pk-helper dcfldd dhclient dmidecode duplicity ethtool expect ffmpeg freerdp gdisk git gnu-netcat id3v2 iftop ipw2100-fw ipw2200-fw iw kexec-tools lame lshw lsof mailx mplayer mpv mtr mutt namcap net-tools nethogs nfs-utils nmap ntfs-3g openldap openssh p7zip parted perl-mime-lite perl-xml-simple pkgstats pwgen pylibacl python-beautifulsoup4 python-boto python-keyring python-pexpect python-pip python-pyxattr python-requests python-setuptools python-yaml python2 python2-beautifulsoup4 python2-boto python2-keyring python2-pexpect python2-pip python2-pyxattr python2-setuptools python2-requests python2-soappy python2-yaml rdesktop rdiff-backup rfkill rpcbind rpmextract rsync screen sharutils strace stunnel subversion sudo tcpdump tigervnc traceroute unrar unzip usb_modeswitch vim-systemd wget whois wireshark-cli zip"
