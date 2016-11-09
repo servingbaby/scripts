@@ -414,10 +414,13 @@ sudo pacman -U cower-*.pkg.tar.xz
 cd ../pacaur
 makepkg -s
 sudo pacman -U pacaur-*.pkg.tar.xz
-pacaur -S --noconfirm downgrade duply networkmanager-dispatcher-chrony \
+
+## random AUR things - uncomment/edit as desired
+#pacaur -S --noconfirm downgrade duply networkmanager-dispatcher-chrony \
   petrified trace-cmd tmpwatch
-# chromium-pepper-flash can be "out of date" and missing upstream, expected
-pacaur -S --noconfirm chromium-pepper-flash
+
+## pepper-flash can be "out of date" and missing upstream, expected
+#pacaur -S --noconfirm pepper-flash
 EOF
     chown ${USERNAME}:users /home/${USERNAME}/aur_setup.sh
   fi
