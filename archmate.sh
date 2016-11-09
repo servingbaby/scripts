@@ -404,8 +404,8 @@ if [[ ! -f /root/.archmate/stage-6.done ]]; then
     cat << 'EOF' > /home/${USERNAME}/aur_setup.sh
 mkdir ~/abs
 cd ~/abs/
-curl -L -O https://aur.archlinux.org/packages/co/cower/cower.tar.gz
-curl -L -O https://aur.archlinux.org/packages/pa/pacaur/pacaur.tar.gz
+curl -L -O https://aur.archlinux.org/cgit/aur.git/snapshot/cower.tar.gz
+curl -L -O https://aur.archlinux.org/cgit/aur.git/snapshot/pacaur.tar.gz
 tar -zxvf cower.tar.gz 
 tar -zxvf pacaur.tar.gz 
 cd cower
