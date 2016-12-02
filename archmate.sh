@@ -81,7 +81,7 @@ PKG_CLI="abs alsa-firmware android-udev axel base-devel bash-completion bc bluez
 PKG_DWIN="accountsservice mate mate-applets mate-extra lightdm-gtk-greeter gnome-keyring gst-plugins-bad gst-plugins-ugly gstreamer0.10-base-plugins gstreamer0.10-ugly gstreamer0.10-ugly-plugins gtk-engine-aurora lxappearance networkmanager networkmanager-openconnect networkmanager-openvpn networkmanager-pptp networkmanager-vpnc network-manager-applet simplescreenrecorder system-config-printer systemd-ui terminator"
 
 # GUI stuff
-PKG_XAPP="argyllcms asunder brasero chromium easytag feh firefox flashplugin geeqie gimp gkrellm gucharmap gvfs-afc gvfs-mtp gvfs-smb gvim hunspell-en hyphen-en libdvdcss libreoffice-fresh pragha pidgin pidgin-otr seahorse thunderbird tk transmission-gtk vlc x11-ssh-askpass xchat wireshark-gtk"
+PKG_XAPP="argyllcms asunder brasero chromium easytag feh firefox freeglut geeqie gimp gkrellm gucharmap gvfs-afc gvfs-mtp gvfs-smb gvim hunspell-en hyphen-en libdvdcss libreoffice-fresh pragha pidgin pidgin-otr seahorse thunderbird tk transmission-gtk vlc x11-ssh-askpass xchat wireshark-gtk"
 
 # Where we'll log all actions (in the chroot)
 ACTLOG="/root/archmate.log"
