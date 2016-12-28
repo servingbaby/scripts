@@ -15,7 +15,7 @@ else
   (>&2 echo -e "Search: ${LIB} (status: \"watch -n 10 kill -HUP $$\" in another terminal)")
 fi
 
-# we'll populate _CDIR and _COBJ in looping stanzas, this goes to STDOUT
+# we'll populate _CDIR and _COBJ in looping stanzas, this goes to STDERR
 _CDIR=""
 _COBJ=""
 function hupcstat() {
