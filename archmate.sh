@@ -78,10 +78,10 @@ PKG_HVBOX="virtualbox virtualbox-host-dkms"
 PKG_CLI="abs alsa-firmware android-udev axel base-devel bash-completion bc bluez bluez-firmware bind-tools cadaver chrony cpio cronie cups cups-filters cups-pdf cups-pk-helper dcfldd dhclient dmidecode duplicity ethtool expect ffmpeg freerdp gdisk git gnu-netcat id3v2 iftop ipw2100-fw ipw2200-fw iw kexec-tools lame lshw lsof mailx mplayer mpv mtr mutt namcap net-tools nethogs nfs-utils nmap ntfs-3g openldap openssh p7zip parted perl-mime-lite perl-xml-simple pkgstats pwgen pylibacl python-beautifulsoup4 python-boto python-keyring python-pexpect python-pip python-pyxattr python-requests python-setuptools python-yaml python2 python2-beautifulsoup4 python2-boto python2-keyring python2-pexpect python2-pip python2-pyxattr python2-setuptools python2-requests python2-soappy python2-yaml rdesktop rdiff-backup rfkill rpcbind rpmextract rsync screen sharutils strace stunnel subversion sudo tcpdump tigervnc traceroute unrar unzip usb_modeswitch vim-systemd wget whois wireshark-cli zip"
 
 # X Desktop stuff
-PKG_DWIN="accountsservice mate mate-applets mate-extra lightdm-gtk-greeter gnome-keyring gst-plugins-bad gst-plugins-ugly gstreamer0.10-base-plugins gstreamer0.10-ugly gstreamer0.10-ugly-plugins gtk-engine-aurora lxappearance networkmanager networkmanager-openconnect networkmanager-openvpn networkmanager-pptp networkmanager-vpnc network-manager-applet simplescreenrecorder system-config-printer systemd-ui terminator"
+PKG_DWIN="accountsservice mate mate-applets mate-extra lightdm-gtk-greeter gnome-keyring gst-plugins-good gst-plugins-bad gst-plugins-ugly gtk-engine-aurora lxappearance networkmanager networkmanager-openconnect networkmanager-openvpn networkmanager-pptp networkmanager-vpnc network-manager-applet simplescreenrecorder system-config-printer systemd-ui terminator"
 
 # GUI stuff
-PKG_XAPP="argyllcms asunder brasero chromium easytag feh firefox freeglut geeqie gimp gkrellm gucharmap gvfs-afc gvfs-mtp gvfs-smb gvim hunspell-en hyphen-en libdvdcss libreoffice-fresh pragha pidgin pidgin-otr seahorse thunderbird tk transmission-gtk vlc x11-ssh-askpass xchat wireshark-gtk"
+PKG_XAPP="argyllcms asunder brasero chromium easytag feh firefox freeglut geeqie gimp gkrellm gucharmap gvfs-afc gvfs-mtp gvfs-smb gvim hexchat hunspell-en hyphen-en libdvdcss libreoffice-fresh pragha pidgin pidgin-otr seahorse thunderbird tk transmission-gtk vlc x11-ssh-askpass wireshark-gtk"
 
 # Where we'll log all actions (in the chroot)
 ACTLOG="/root/archmate.log"
